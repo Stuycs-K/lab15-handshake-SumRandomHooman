@@ -27,7 +27,7 @@ int server_setup() {
   mkfifo(wkp, 0666);
   printf("WKP created\n");
   // Open WKP (Read)
-  int syn = open(WKP, O_RDONLY);
+  int syn = fopen(WKP, O_RDONLY);
   // Remove WKP
   remove(wkp);
   printf("WKP removed\n");
@@ -84,11 +84,13 @@ int client_handshake(int *to_server) {
   char * pp = "./PP";
   mkfifo(pp, 0666);
   // Open WKP (Write)
-  int syn = open(wkp, O_WRONLY);
+  int syn = fopen(wkp, O_WRONLY);
+  printf("WKP has been opened\n");
   // Sending PP
   write(syn, pp, strlen(pp)+1);
+  printf("PP has been sent\n");
   // Open PP (Read)
-  int syn_ack = open(pp, O_RDONLY);
+  int syn_ack = fopen(pp, O_RDONLY);
   // // Remove PP
   // remove(pp);
   // // Reading SYN_ACK
