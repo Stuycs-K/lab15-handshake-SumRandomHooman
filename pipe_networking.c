@@ -25,13 +25,13 @@ int server_setup() {
   // Create WKP
   char * wkp = "./WKP";
   mkfifo(wkp, 0666);
-  printf("WKP created\n");
+  // printf("WKP created\n");
   // Open WKP (Read)
   int syn = open(wkp, O_RDONLY);
-  printf("Connection created\n");
+  // printf("Connection created\n");
   // Remove WKP
   remove(wkp);
-  printf("WKP removed\n");
+  // printf("WKP removed\n");
   return syn;
 }
 
@@ -50,7 +50,7 @@ int server_handshake(int *to_client) {
   // Read PP
   char pp[256];
   read(syn, pp, sizeof(pp));
-  printf("Read pp named %s\n", pp);
+  // printf("Read pp named %s\n", pp);
   // Opening PP (Write)
   int syn_ack = open(pp, O_WRONLY);
   // Making random SYN_ACK
@@ -59,11 +59,11 @@ int server_handshake(int *to_client) {
   sprintf(buffer, "%d", random);
   // Sending SYN_ACK
   write(syn_ack, buffer, strlen(buffer)+1);
-  printf("Message sent is %s\n", buffer);
+  // printf("Message sent is %s\n", buffer);
   // Reading ACK
   char received[256];
   read(syn, received, sizeof(received));
-  printf("Read wkp for message %s\n", received);
+  // printf("Read wkp for message %s\n", received);
   *to_client = syn_ack;
   return syn;
 }
@@ -86,28 +86,28 @@ int client_handshake(int *to_server) {
   mkfifo(pp, 0666);
   // Open WKP (Write)
   int syn = open(wkp, O_WRONLY);
-  printf("WKP has been opened\n");
+  // printf("WKP has been opened\n");
   // Sending PP
   write(syn, pp, strlen(pp)+1);
-  printf("PP has been sent\n");
+  // printf("PP has been sent\n");
   // Open PP (Read)
   int syn_ack = open(pp, O_RDONLY);
-  printf("PP opened\n");
+  // printf("PP opened\n");
   // Remove PP
   remove(pp);
-  printf("PP deleted\n");
+  // printf("PP deleted\n");
   // Reading SYN_ACK
   char buffer[256];
   read(syn_ack, buffer, sizeof(buffer));
-  printf("Read message %s\n", buffer);
+  // printf("Read message %s\n", buffer);
   // Creating ACK
   int received = atoi(buffer);
-  printf("Converted int %d\n", received);
+  // printf("Converted int %d\n", received);
   received ++;
-  printf("New int is %d\n", received);
+  // printf("New int is %d\n", received);
   char sending[256];
   sprintf(sending, "%d\n", received);
-  printf("Sending back %s\n", sending);
+  // printf("Sending back %s\n", sending);
   // Sending ACK
   write(syn, sending, strlen(sending)+1);
   *to_server = syn;
