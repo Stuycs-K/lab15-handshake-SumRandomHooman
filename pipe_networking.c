@@ -63,6 +63,12 @@ int server_handshake(int *to_client) {
   // Reading ACK
   char received[256];
   read(syn, received, sizeof(received));
+  int check = atoi(received);
+  if(check -1 == random){
+    // printf("Success\n");
+  }else{
+    printf("Server send fail");
+  }
   // printf("Read wkp for message %s\n", received);
   *to_client = syn_ack;
   return syn;
