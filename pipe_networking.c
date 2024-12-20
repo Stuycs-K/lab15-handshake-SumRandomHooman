@@ -11,8 +11,8 @@ int rand(){ // generates random int
   return *buff;
 }
 
-//UPSTREAM = to the server / from the client
-//DOWNSTREAM = to the client / from the server
+//UPSTREAM = to the server / from the client ; WKP
+//DOWNSTREAM = to the client / from the server ; PP
 /*=========================
   server_setup
 
@@ -27,7 +27,8 @@ int server_setup() {
   mkfifo(wkp, 0666);
   printf("WKP created\n");
   // Open WKP (Read)
-  int syn = fopen(WKP, O_RDONLY);
+  int syn = open(wkp, O_RDONLY);
+  printf("Connection created\n");
   // Remove WKP
   remove(wkp);
   printf("WKP removed\n");
@@ -46,25 +47,25 @@ int server_setup() {
 int server_handshake(int *to_client) {
   // Server Setup
   int syn = server_setup();
-  // // Read PP
-  // char pp[256];
-  // read(syn, pp, sizeof(pp));
-  // printf("Read pp named %s\n", pp);
-  // // Opening PP (Write)
-  // int syn_ack = open(pp, O_WRONLY);
-  // // Making random SYN_ACK
-  // int random = rand();
-  // char buffer[256];
-  // sprintf(buffer, "%d", random);
-  // // Sending SYN_ACK
-  // write(syn_ack, buffer, strlen(buffer)+1);
-  // printf("Message sent is %s\n", buffer);
-  // // Reading ACK
-  // char recieved[256];
-  // read(syn, recieved, sizeof(received));
-  // printf("Read wkp for mesage %s\n", recieved);
-  int from_client;
-  return from_client;
+  // Read PP
+  char pp[256];
+  read(syn, pp, sizeof(pp));
+  printf("Read pp named %s\n", pp);
+  // Opening PP (Write)
+  int syn_ack = open(pp, O_WRONLY);
+  // Making random SYN_ACK
+  int random = rand();
+  char buffer[256];
+  sprintf(buffer, "%d", random);
+  // Sending SYN_ACK
+  write(syn_ack, buffer, strlen(buffer)+1);
+  printf("Message sent is %s\n", buffer);
+  // Reading ACK
+  char received[256];
+  read(syn, received, sizeof(received));
+  printf("Read wkp for message %s\n", received);
+  *to_client = syn_ack;
+  return syn;
 }
 
 
@@ -84,27 +85,33 @@ int client_handshake(int *to_server) {
   char * pp = "./PP";
   mkfifo(pp, 0666);
   // Open WKP (Write)
-  int syn = fopen(wkp, O_WRONLY);
+  int syn = open(wkp, O_WRONLY);
   printf("WKP has been opened\n");
   // Sending PP
   write(syn, pp, strlen(pp)+1);
   printf("PP has been sent\n");
   // Open PP (Read)
-  int syn_ack = fopen(pp, O_RDONLY);
-  // // Remove PP
-  // remove(pp);
-  // // Reading SYN_ACK
-  // char buffer[256];
-  // read(syn_ack, buffer, sizeof(buffer));
-  // // Creating ACK
-  // int received = atoi(buffer);
-  // recieved ++;
-  // char sending[256];
-  // sprintf(sending, "%d", buffer);
-  // // Sending ACK
-  // write(syn, sending, strlen(sending)+1);
-  int from_server;
-  return from_server;
+  int syn_ack = open(pp, O_RDONLY);
+  printf("PP opened\n");
+  // Remove PP
+  remove(pp);
+  printf("PP deleted\n");
+  // Reading SYN_ACK
+  char buffer[256];
+  read(syn_ack, buffer, sizeof(buffer));
+  printf("Read message %s\n", buffer);
+  // Creating ACK
+  int received = atoi(buffer);
+  printf("Converted int %d\n", received);
+  received ++;
+  printf("New int is %d\n", received);
+  char sending[256];
+  sprintf(sending, "%d\n", received);
+  printf("Sending back %s\n", sending);
+  // Sending ACK
+  write(syn, sending, strlen(sending)+1);
+  *to_server = syn;
+  return syn_ack;
 }
 
 
