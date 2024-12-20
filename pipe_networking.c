@@ -46,23 +46,23 @@ int server_setup() {
 int server_handshake(int *to_client) {
   // Server Setup
   int syn = server_setup();
-  // Read PP
-  char pp[256];
-  read(syn, pp, sizeof(pp));
-  printf("Read pp named %s\n", pp);
-  // Opening PP (Write)
-  int syn_ack = open(pp, O_WRONLY);
-  // Making random SYN_ACK
-  int random = rand();
-  char buffer[256];
-  sprintf(buffer, "%d", random);
-  // Sending SYN_ACK
-  write(syn_ack, buffer, strlen(buffer)+1);
-  
-  // Reading ACK
-  char recieved[256];
-  read(syn, recieved, sizeof(received));
-  printf("Read wkp for mesage %s\n", recieved);
+  // // Read PP
+  // char pp[256];
+  // read(syn, pp, sizeof(pp));
+  // printf("Read pp named %s\n", pp);
+  // // Opening PP (Write)
+  // int syn_ack = open(pp, O_WRONLY);
+  // // Making random SYN_ACK
+  // int random = rand();
+  // char buffer[256];
+  // sprintf(buffer, "%d", random);
+  // // Sending SYN_ACK
+  // write(syn_ack, buffer, strlen(buffer)+1);
+  // printf("Message sent is %s\n", buffer);
+  // // Reading ACK
+  // char recieved[256];
+  // read(syn, recieved, sizeof(received));
+  // printf("Read wkp for mesage %s\n", recieved);
   int from_client;
   return from_client;
 }
@@ -89,18 +89,18 @@ int client_handshake(int *to_server) {
   write(syn, pp, strlen(pp)+1);
   // Open PP (Read)
   int syn_ack = open(pp, O_RDONLY);
-  // Remove PP
-  remove(pp);
-  // Reading SYN_ACK
-  char buffer[256];
-  read(syn_ack, buffer, sizeof(buffer));
-  // Creating ACK
-  int received = atoi(buffer);
-  recieved ++;
-  char sending[256];
-  sprintf(sending, "%d", buffer);
-  // Sending ACK
-  write(syn, sending, strlen(sending)+1);
+  // // Remove PP
+  // remove(pp);
+  // // Reading SYN_ACK
+  // char buffer[256];
+  // read(syn_ack, buffer, sizeof(buffer));
+  // // Creating ACK
+  // int received = atoi(buffer);
+  // recieved ++;
+  // char sending[256];
+  // sprintf(sending, "%d", buffer);
+  // // Sending ACK
+  // write(syn, sending, strlen(sending)+1);
   int from_server;
   return from_server;
 }
