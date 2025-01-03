@@ -5,11 +5,13 @@ int main() {
   int to_server;
   int from_server;
 
+  printf("Attempting Hand Shake\n");
   from_server = client_handshake( &to_server );
-  // 
-  // printf("Handshake achieved\n");
-  // write(to_server, "a", 1);
-  // char buffer[2];
-  // read(from_server, buffer, sizeof(buffer));
-  // printf("Send and then recieved %s\n", buffer);
+  printf("Hand Shake Success\n");
+  
+  int recievedvalue;
+  while(read(from_server, &recievedvalue, sizeof(int))){
+    printf("Recieved %d\n", recievedvalue);
+  }
+  
 }

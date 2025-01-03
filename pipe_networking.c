@@ -27,6 +27,7 @@ int server_setup() {
   mkfifo(wkp, 0666);
   // printf("WKP created\n");
   // Open WKP (Read)
+  // printf("Attempting to open WKP\n");
   int syn = open(wkp, O_RDONLY);
   // printf("Connection created\n");
   // Remove WKP
@@ -48,6 +49,7 @@ int server_handshake(int *to_client) {
   // Server Setup
   int syn = server_setup();
   // Read PP
+  // printf("Attempting to read pp\n");
   char pp[256];
   read(syn, pp, sizeof(pp));
   // printf("Read pp named %s\n", pp);
@@ -92,6 +94,9 @@ int client_handshake(int *to_server) {
   mkfifo(pp, 0666);
   // Open WKP (Write)
   int syn = open(wkp, O_WRONLY);
+  while(syn == -1){
+    syn = open(wkp, O_WRONLY);
+  }
   // printf("WKP has been opened\n");
   // Sending PP
   write(syn, pp, strlen(pp)+1);

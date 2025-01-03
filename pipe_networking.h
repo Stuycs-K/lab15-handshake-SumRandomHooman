@@ -22,6 +22,8 @@
 #define EXIT 4
 
 
+int rand();
+
 int server_handshake(int *to_client);
 int client_handshake(int *to_server);
 
