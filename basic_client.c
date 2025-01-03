@@ -6,7 +6,7 @@ int main() {
   int from_server;
 
   from_server = client_handshake( &to_server );
-  // 
+  //
   // printf("Handshake achieved\n");
   // write(to_server, "a", 1);
   // char buffer[2];
