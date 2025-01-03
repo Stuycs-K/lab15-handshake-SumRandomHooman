@@ -27,6 +27,7 @@ int server_setup() {
   mkfifo(wkp, 0666);
   // printf("WKP created\n");
   // Open WKP (Read)
+  // printf("Attempting to open WKP\n");
   int syn = open(wkp, O_RDONLY);
   // printf("Connection created\n");
   // Remove WKP
@@ -48,6 +49,7 @@ int server_handshake(int *to_client) {
   // Server Setup
   int syn = server_setup();
   // Read PP
+  // printf("Attempting to read pp\n");
   char pp[256];
   read(syn, pp, sizeof(pp));
   // printf("Read pp named %s\n", pp);
@@ -92,6 +94,9 @@ int client_handshake(int *to_server) {
   mkfifo(pp, 0666);
   // Open WKP (Write)
   int syn = open(wkp, O_WRONLY);
+  while(syn == -1){
+    syn = open(wkp, O_WRONLY);
+  }
   // printf("WKP has been opened\n");
   // Sending PP
   write(syn, pp, strlen(pp)+1);
@@ -118,6 +123,36 @@ int client_handshake(int *to_server) {
   write(syn, sending, strlen(sending)+1);
   *to_server = syn;
   return syn_ack;
+}
+
+void server_handshake_half(int *to_client, int from_client) {
+  // Server Setup
+  int syn = from_client;
+  // Read PP
+  // printf("Attempting to read pp\n");
+  char pp[256];
+  read(syn, pp, sizeof(pp));
+  // printf("Read pp named %s\n", pp);
+  // Opening PP (Write)
+  int syn_ack = open(pp, O_WRONLY);
+  // Making random SYN_ACK
+  int random = rand();
+  char buffer[256];
+  sprintf(buffer, "%d", random);
+  // Sending SYN_ACK
+  write(syn_ack, buffer, strlen(buffer)+1);
+  // printf("Message sent is %s\n", buffer);
+  // Reading ACK
+  char received[256];
+  read(syn, received, sizeof(received));
+  int check = atoi(received);
+  if(check -1 == random){
+    // printf("Success\n");
+  }else{
+    printf("Server send fail");
+  }
+  // printf("Read wkp for message %s\n", received);
+  *to_client = syn_ack;
 }
 
 

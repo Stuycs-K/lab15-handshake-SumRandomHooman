@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <errno.h>
+#include <signal.h>
 
 #ifndef NETWORKING_H
 #define NETWORKING_H
@@ -22,8 +23,11 @@
 #define EXIT 4
 
 
+int rand();
+
 int server_handshake(int *to_client);
 int client_handshake(int *to_server);
+void server_handshake_half(int *to_client, int from_client);
 
 //for basic & persistent servers
 int server_connect(int from_client);
