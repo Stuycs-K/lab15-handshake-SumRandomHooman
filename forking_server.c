@@ -25,16 +25,19 @@ int main(){
     }
     if(subserver == 0){
       server_handshake_half(&to_client, from_client);
+      printf("Handshake achieved\n");
       // Sending Number
       int designatedSend = rand()%101;
       printf("Number Designated sending to client %d: %d\n",childnum ,designatedSend);
-      while(write(to_client, &designatedSend, sizeof(int)) != -1){
+      while(write(to_client, &designatedSend, sizeof(int))){
           sleep(1);
       }
+      printf("Loop terminates\n");
       // Closing Files
       close(to_client);
       close(from_client);
       // Telling child to kill self
+      printf("Child told to kill self??\n");
       exit(0);
     }
     else{
