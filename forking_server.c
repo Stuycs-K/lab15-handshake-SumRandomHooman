@@ -9,6 +9,7 @@ static void sighandler(int signo){
 
 int main(){
   signal(SIGINT, sighandler);
+  signal(SIGPIPE, SIG_IGN);
   int to_client;
   int from_client;
   int childnum = 1;
