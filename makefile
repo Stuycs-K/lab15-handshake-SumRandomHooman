@@ -1,7 +1,7 @@
 all: client server
-compile: basic_client.o pipe_networking.o persistent_server.o
+compile: basic_client.o pipe_networking.o forking_server.o
 	@gcc -o clientSide basic_client.o pipe_networking.o
-	@gcc -o serverSide persistent_server.o pipe_networking.o
+	@gcc -o serverSide forking_server.o pipe_networking.o
 
 client:
 	@./clientSide
