@@ -25,7 +25,7 @@ int main(){
     }
     if(subserver == 0){
       server_handshake_half(&to_client, from_client);
-      printf("Handshake achieved\n");
+      // printf("Handshake achieved\n");
       // Sending Number
       int designatedSend = rand()%101;
       printf("Number Designated sending to client %d: %d\n",childnum ,designatedSend);
