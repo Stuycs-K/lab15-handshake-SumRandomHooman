@@ -24,7 +24,7 @@ int main(){
       exit(1);
     }
     if(subserver == 0){
-      signal(SIGINT, SIG_IGN);
+      // signal(SIGINT, SIG_IGN); // uncomment for subservers that outlive server
       server_handshake_half(&to_client, from_client);
       // printf("Handshake achieved\n");
       // Sending Number
